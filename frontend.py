@@ -7,7 +7,8 @@ from main import app
 st.set_page_config(
     page_title="AI Travel Booking System",
     page_icon="✈️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 st.markdown("""
@@ -19,13 +20,19 @@ html, body, .stApp {
     background-color: #080d14;
 }
 
+/* ── Completely remove sidebar ── */
+section[data-testid="stSidebar"],
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+
 /* ── Hero ── */
 .hero-wrapper {
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 2rem;
-    height: 280px;
+    margin-bottom: 1.6rem;
+    height: 250px;
 }
 .hero-bg {
     width: 100%;
@@ -45,7 +52,7 @@ html, body, .stApp {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
 }
 .hero-badge {
     background: rgba(58,123,213,0.25);
@@ -57,60 +64,105 @@ html, body, .stApp {
     text-transform: uppercase;
     padding: 0.3rem 0.9rem;
     border-radius: 20px;
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.7rem;
     display: inline-block;
 }
 .hero-title {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: #ffffff;
-    margin: 0 0 0.6rem;
+    margin: 0 0 0.5rem;
     line-height: 1.2;
 }
 .hero-sub {
     color: #94adc8;
-    font-size: 1rem;
-    max-width: 560px;
+    font-size: 0.95rem;
+    max-width: 620px;
 }
 
-/* ── Input card ── */
-.input-card {
+/* ── Agent Pipeline Card ── */
+.pipeline-card {
     background: #0e1623;
     border: 1px solid #1e2e44;
     border-radius: 16px;
-    padding: 1.6rem 1.8rem;
-    margin-bottom: 1.5rem;
+    padding: 1.3rem 1.6rem;
+    margin-bottom: 1.6rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
+.pipeline-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+}
+.pipeline-badge {
+    background: rgba(58,123,213,0.22);
+    border: 1px solid rgba(58,123,213,0.45);
+    color: #7ab8f5 !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+}
+.pipeline-title {
+    color: #e0edf8;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+.pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+}
+.pipeline-step {
+    background: #09101b;
+    border: 1px solid #17273c;
+    border-radius: 12px;
+    padding: 0.9rem 0.9rem;
+    transition: all 0.2s ease;
+}
+.pipeline-step:hover {
+    border-color: #3a7bd5;
+    background: #0d1726;
+    transform: translateY(-2px);
+}
+.step-badge {
+    display: inline-block;
+    color: #4ea8f0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-right: 0.3rem;
+}
+.step-icon {
+    font-size: 1.35rem;
+    margin-bottom: 0.35rem;
+}
+.step-title {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+.step-desc {
+    color: #7a98b5;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+/* ── Input card ── */
 .input-label {
     color: #7ab8f5;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
 }
 
-/* ── Quick destinations ── */
-.dest-row {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin: 0.8rem 0 1.2rem;
-}
-.dest-chip {
-    background: #111b2b;
-    border: 1px solid #1e3050;
-    color: #f7fdf4;
-    padding: 0.35rem 0.85rem;
-    border-radius: 20px;
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.dest-chip:hover { background: #1a2e47; border-color: #3a7bd5; color: #fff; }
-
-/* ── Generate button ── */
-div[data-testid="stButton"] > button {
+/* ── Primary Generate button ── */
+button[kind="primary"] {
     background: linear-gradient(135deg, #1a6bbf 0%, #0d4a8a 50%, #0a3d75 100%) !important;
     color: #ffffff !important;
     border: none !important;
@@ -119,17 +171,35 @@ div[data-testid="stButton"] > button {
     font-size: 1.05rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.03em !important;
-    width: 100% !important;
     box-shadow: 0 0 24px rgba(26,107,191,0.35), 0 4px 15px rgba(0,0,0,0.4) !important;
     transition: all 0.3s ease !important;
 }
-div[data-testid="stButton"] > button:hover {
+button[kind="primary"]:hover {
     box-shadow: 0 0 40px rgba(26,107,191,0.6), 0 6px 20px rgba(0,0,0,0.5) !important;
     transform: translateY(-2px) !important;
     background: linear-gradient(135deg, #2278d4 0%, #1057a0 50%, #0d4a8a 100%) !important;
 }
-div[data-testid="stButton"] > button:active {
+button[kind="primary"]:active {
     transform: translateY(0px) !important;
+}
+
+/* ── Secondary Quick prompt buttons ── */
+button[kind="secondary"] {
+    background: #0d1726 !important;
+    color: #9ec5ed !important;
+    border: 1px solid #1c324e !important;
+    border-radius: 9px !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+}
+button[kind="secondary"]:hover {
+    background: #14253d !important;
+    color: #ffffff !important;
+    border-color: #3a7bd5 !important;
+    transform: translateY(-1px) !important;
 }
 
 /* ── Agent status cards ── */
@@ -179,7 +249,7 @@ div[data-testid="stButton"] > button:active {
     text-align: center;
 }
 .metric-val { font-size: 1.8rem; font-weight: 700; color: #4ea8f0; }
-.metric-lbl { font-size: 0.78rem; color: #5a7a96; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.metric-lbl { font-size: 0.78rem; color: #7aa8cc !important; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
 
 /* ── Final plan ── */
 .final-card {
@@ -199,26 +269,11 @@ div[data-testid="stButton"] > button:active {
     border: 1px solid #1e2e44;
     border-radius: 10px;
     padding: 0.85rem 1.2rem;
-    color: #5a8ab0;
+    color: #8ab8d8 !important;
     font-size: 0.88rem;
     margin-top: 0.5rem;
 }
-
-/* ── Sidebar ── */
-section[data-testid="stSidebar"] {
-    background: #090e18 !important;
-    border-right: 1px solid #141f30 !important;
-}
-.sidebar-chip {
-    background: #0e1a2b;
-    border: 1px solid #1a2e44;
-    border-radius: 8px;
-    padding: 0.45rem 0.75rem;
-    margin-bottom: 0.4rem;
-    font-size: 0.83rem;
-    color: #7aa8cc;
-}
-.sidebar-title { color: #e0edf8; font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+.save-bar code { color: #7ab8f5 !important; background: #0a1520 !important; }
 
 /* Hide branding */
 #MainMenu, footer, header { visibility: hidden; }
@@ -238,7 +293,7 @@ section[data-testid="stSidebar"] {
 }
 .stTextArea textarea::placeholder { color: #4a6a85 !important; }
 
-/* Text input (sidebar User ID field) */
+/* Text input */
 input[type="text"], .stTextInput input {
     background: #0e1a2b !important;
     border: 1px solid #1a2e44 !important;
@@ -272,25 +327,11 @@ input[type="text"]::placeholder { color: #3a5570 !important; }
     border-radius: 4px;
 }
 
-/* Metric labels — was #5a7a96 (too dim on dark bg) */
-.metric-lbl { color: #7aa8cc !important; }
-
-/* Save bar — was #5a8ab0 (slightly dim) */
-.save-bar { color: #8ab8d8 !important; }
-.save-bar code { color: #7ab8f5 !important; background: #0a1520 !important; }
-
-/* Streamlit warning / info / success on dark bg */
+/* Alerts */
 .stAlert { background: #0e1a2b !important; border-radius: 10px !important; }
 .stAlert p, .stAlert div { color: #e0edf8 !important; }
 
-/* Sidebar text & dividers */
-section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] span,
-section[data-testid="stSidebar"] label,
-section[data-testid="stSidebar"] .stMarkdown { color: #a0c4e0 !important; }
-section[data-testid="stSidebar"] hr { border-color: #1a2e44 !important; }
-
-/* Download button — light bg → dark text  */
+/* Download button */
 div[data-testid="stDownloadButton"] > button {
     background: #1a3a5c !important;
     color: #e8f4ff !important;
@@ -300,21 +341,14 @@ div[data-testid="stDownloadButton"] > button {
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown("<div class='sidebar-title'>🌍 AI Travel Planner</div>", unsafe_allow_html=True)
-    st.markdown("---")
+# ── Session state for user query and prompt pasting ────────────────────────────
+if "user_query" not in st.session_state:
+    st.session_state.user_query = ""
 
-    thread_id = st.text_input("👤 User ID", value="aarohi_user",
-                              help="Your session ID — keeps travel history across queries")
+def apply_quick_prompt(prompt_text: str):
+    st.session_state.user_query = prompt_text
 
-    st.markdown("<div class='sidebar-title'>Powered by</div>", unsafe_allow_html=True)
-    for tech in ["🔗 LangGraph", "🧠 Groq AI", "🐘 PostgreSQL", "🔍 Tavily Search", "✈️ AviationStack"]:
-        st.markdown(f"<div class='sidebar-chip'>{tech}</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='sidebar-title'>Agent Pipeline</div>", unsafe_allow_html=True)
-    for step in ["① Flight Agent", "② Hotel Agent", "③ Itinerary Agent", "④ Final Agent"]:
-        st.markdown(f"<div class='sidebar-chip'>{step}</div>", unsafe_allow_html=True)
+thread_id = "user_aarohi"
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -325,7 +359,7 @@ st.markdown("""
     <div class="hero-content">
         <div class="hero-badge">✦ Multi-Agent AI System</div>
         <div class="hero-title">✈️ AI Travel Booking System</div>
-        <div class="hero-sub">Four specialized agents work together — searching flights, hotels, building an itinerary, and delivering your perfect trip plan.</div>
+        <div class="hero-sub">Autonomous multi-agent concierge searching flights, discovering stays, crafting day-by-day itineraries, and delivering complete travel plans.</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -343,37 +377,82 @@ cols = st.columns(5)
 for col, (name, img_url) in zip(cols, DESTINATIONS):
     with col:
         st.markdown(f"""
-        <div style="border-radius:10px;overflow:hidden;position:relative;height:90px;cursor:pointer;">
+        <div style="border-radius:10px;overflow:hidden;position:relative;height:85px;margin-bottom:1rem;">
             <img src="{img_url}" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.55);" />
             <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;
                         color:#fff;font-size:0.8rem;font-weight:600;">{name}</div>
         </div>
         """, unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+# ── Card for Agent Pipeline (Before Describe Your Trip) ─────────────────────────
+st.markdown("""
+<div class="pipeline-card">
+    <div class="pipeline-header">
+        <span class="pipeline-badge">⚡ Workflow</span>
+        <span class="pipeline-title">Agent Pipeline</span>
+    </div>
+    <div class="pipeline-grid">
+        <div class="pipeline-step">
+            <div class="step-icon">✈️</div>
+            <div class="step-title"><span class="step-badge">①</span> Flight Agent</div>
+            <div class="step-desc">Searches live commercial airline routes and departure/arrival schedules</div>
+        </div>
+        <div class="pipeline-step">
+            <div class="step-icon">🏨</div>
+            <div class="step-title"><span class="step-badge">②</span> Hotel Agent</div>
+            <div class="step-desc">Discovers top-rated accommodations, luxury resorts, and popular attractions</div>
+        </div>
+        <div class="pipeline-step">
+            <div class="step-icon">🗓️</div>
+            <div class="step-title"><span class="step-badge">③</span> Itinerary Agent</div>
+            <div class="step-desc">Synthesizes day-by-day pacing, travel schedule, and sightseeing activities</div>
+        </div>
+        <div class="pipeline-step">
+            <div class="step-icon">🧠</div>
+            <div class="step-title"><span class="step-badge">④</span> Final Agent</div>
+            <div class="step-desc">Consolidates flights, hotels, and schedule into a cohesive final proposal</div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-# ── Input ─────────────────────────────────────────────────────────────────────
+# ── Describe Your Trip Section ─────────────────────────────────────────────────
 st.markdown("<div class='input-label'>🗺️ Describe your trip</div>", unsafe_allow_html=True)
 
-QUICK = ["7-day Japan under ₹2L", "Paris trip for 5 days", "Dubai weekend trip", "Bali backpacking 10 days"]
-qcols = st.columns(len(QUICK))
-quick_fill = ""
-for qc, label in zip(qcols, QUICK):
-    with qc:
-        if st.button(label, key=f"q_{label}"):
-            quick_fill = label
-
 user_query = st.text_area(
-    "",
-    value=quick_fill,
-    placeholder="e.g. Plan a complete 7-day Japan trip including flights, hotels and sightseeing under ₹2 lakhs",
-    height=100,
+    "Describe your trip",
+    key="user_query",
+    placeholder="e.g. Plan a 7-day luxury trip to Japan from Mumbai under ₹10 lakhs with flights, 5-star hotels, and bullet trains...",
+    height=110,
     label_visibility="collapsed",
 )
 
-generate = st.button("🚀  Generate My Travel Plan", use_container_width=True)
+st.markdown("<div style='color:#7ab8f5; font-size:0.78rem; font-weight:600; letter-spacing:0.06em; margin:0.3rem 0 0.4rem;'>⚡ QUICK PROMPTS (Click to paste into input box):</div>", unsafe_allow_html=True)
 
-# ── Agent pipeline ────────────────────────────────────────────────────────────
+QUICK_PROMPTS = [
+    ("🇯🇵 Japan (₹10L)", "Plan a complete 7-day luxury trip to Japan from Mumbai under ₹10 lakhs including round-trip flights, 5-star hotels in Tokyo and Kyoto, bullet train passes, and curated sightseeing."),
+    ("🇫🇷 Paris & Swiss (₹10L)", "Plan an 8-day Paris and Switzerland vacation from Delhi under ₹10 lakhs with 5-star stays, scenic train passes, Eiffel Tower dinner, and guided tours."),
+    ("🇦🇪 Dubai VIP (₹10L)", "Plan a 6-day ultra-luxury Dubai holiday from India under ₹10 lakhs with Emirates flights, Atlantis The Palm stay, private desert safari, and yacht tour."),
+    ("🏝️ Bali Luxury (₹10L)", "Plan a 7-day luxury honeymoon in Bali from Bangalore under ₹10 lakhs including private pool villa, flights, and island excursions."),
+    ("🇮🇳 Royal Rajasthan (₹10L)", "Plan a 7-day ultra-luxury royal heritage tour of Udaipur and Jaipur under ₹10 lakhs from Mumbai staying at Taj Lake Palace and Rambagh Palace with private chauffeur.")
+]
+
+qcols = st.columns(len(QUICK_PROMPTS))
+for qc, (label, prompt_text) in zip(qcols, QUICK_PROMPTS):
+    with qc:
+        st.button(
+            label,
+            key=f"qp_{label}",
+            on_click=apply_quick_prompt,
+            args=(prompt_text,),
+            type="secondary",
+            use_container_width=True
+        )
+
+st.markdown("<br>", unsafe_allow_html=True)
+generate = st.button("🚀  Generate My Travel Plan", type="primary", use_container_width=True)
+
+# ── Agent Execution Pipeline ──────────────────────────────────────────────────
 AGENT_META = {
     "flight_agent":    ("✈️", "Flight Agent"),
     "hotel_agent":     ("🏨", "Hotel Agent"),
@@ -382,80 +461,99 @@ AGENT_META = {
 }
 
 if generate:
-    if not user_query.strip():
-        st.warning("Please describe your trip first.")
+    raw_query = st.session_state.get("user_query", "").strip()
+
+    # If user prompt is empty or not detailed enough, default to trip from India under 10 lakhs rupees
+    if not raw_query:
+        effective_query = (
+            "Plan a comprehensive 7-day luxury vacation departing from India under ₹10 lakhs (INR) budget "
+            "including return flights from Mumbai/Delhi, premium 5-star hotel accommodations, daily activities, "
+            "and a detailed day-by-day itinerary."
+        )
+        st.info("💡 No prompt provided — automatically generated a curated luxury trip from India under ₹10 lakhs!")
+    elif len(raw_query.split()) < 4 or ("india" not in raw_query.lower() and "lakh" not in raw_query.lower() and "10" not in raw_query.lower()):
+        effective_query = (
+            f"{raw_query}. Please plan this complete trip departing from India with a total budget under ₹10 lakhs "
+            f"(1,000,000 INR), including return flights from India, 4 to 5-star hotel accommodations, "
+            f"local sightseeing experiences, and a structured day-by-day itinerary."
+        )
+        st.info("💡 Enriched your trip prompt: departing from India under ₹10 lakhs budget.")
     else:
-        config = {"configurable": {"thread_id": thread_id}}
-        collected = {"flight_results": "", "hotel_results": "",
-                     "itinerary": "", "final_response": "", "llm_calls": 0}
+        effective_query = raw_query
 
-        st.markdown("---")
-        st.markdown("<div class='sec-head'><span>🤖 Agent Pipeline — Live</span></div>",
-                    unsafe_allow_html=True)
+    config = {"configurable": {"thread_id": thread_id}}
+    collected = {
+        "flight_results": "",
+        "hotel_results": "",
+        "itinerary": "",
+        "final_response": "",
+        "llm_calls": 0,
+    }
 
-        for chunk in app.stream(
-            {
-                "messages": [HumanMessage(content=user_query)],
-                "user_query": user_query,
-                "flight_results": "",
-                "hotel_results": "",
-                "itinerary": "",
-                "llm_calls": 0,
-            },
-            config=config,
-            stream_mode="updates",
-        ):
-            for node_name, state_update in chunk.items():
-                icon, label = AGENT_META.get(node_name, ("🔧", node_name))
+    st.markdown("---")
+    st.markdown("<div class='sec-head'><span>🤖 Agent Pipeline — Live</span></div>", unsafe_allow_html=True)
 
-                with st.status(f"{icon}  {label}", state="complete", expanded=True):
-                    if node_name == "flight_agent":
-                        text = state_update.get("flight_results", "")
-                        collected["flight_results"] = text
-                        st.markdown(text or "_No flight data returned._")
+    for chunk in app.stream(
+        {
+            "messages": [HumanMessage(content=effective_query)],
+            "user_query": effective_query,
+            "flight_results": "",
+            "hotel_results": "",
+            "itinerary": "",
+            "llm_calls": 0,
+        },
+        config=config,
+        stream_mode="updates",
+    ):
+        for node_name, state_update in chunk.items():
+            icon, label = AGENT_META.get(node_name, ("🔧", node_name))
 
-                    elif node_name == "hotel_agent":
-                        text = state_update.get("hotel_results", "")
-                        collected["hotel_results"] = text
-                        st.markdown(text or "_No hotel data returned._")
+            with st.status(f"{icon}  {label}", state="complete", expanded=True):
+                if node_name == "flight_agent":
+                    text = state_update.get("flight_results", "")
+                    collected["flight_results"] = text
+                    st.markdown(text or "_No flight data returned._")
 
-                    elif node_name == "itinerary_agent":
-                        text = state_update.get("itinerary", "")
-                        collected["itinerary"] = text
-                        st.markdown(text or "_No itinerary generated._")
+                elif node_name == "hotel_agent":
+                    text = state_update.get("hotel_results", "")
+                    collected["hotel_results"] = text
+                    st.markdown(text or "_No hotel data returned._")
 
-                    elif node_name == "final_agent":
-                        msgs = state_update.get("messages", [])
-                        text = msgs[-1].content if msgs else ""
-                        collected["final_response"] = text
-                        st.markdown(text or "_No final response._")
+                elif node_name == "itinerary_agent":
+                    text = state_update.get("itinerary", "")
+                    collected["itinerary"] = text
+                    st.markdown(text or "_No itinerary generated._")
 
-                    collected["llm_calls"] = state_update.get("llm_calls", collected["llm_calls"])
+                elif node_name == "final_agent":
+                    msgs = state_update.get("messages", [])
+                    text = msgs[-1].content if msgs else ""
+                    collected["final_response"] = text
+                    st.markdown(text or "_No final response._")
 
-        # Metrics
-        st.markdown(f"""
-        <div class="metric-row">
-            <div class="metric-box"><div class="metric-val">4</div><div class="metric-lbl">Agents Run</div></div>
-            <div class="metric-box"><div class="metric-val">{collected['llm_calls']}</div><div class="metric-lbl">LLM Calls</div></div>
-            <div class="metric-box"><div class="metric-val">✅</div><div class="metric-lbl">Status</div></div>
-        </div>
-        """, unsafe_allow_html=True)
+                collected["llm_calls"] = state_update.get("llm_calls", collected["llm_calls"])
 
-        # Final plan card
-        if collected["final_response"]:
-            st.markdown("<div class='sec-head'><span>🧠 Final Travel Plan</span></div>",
-                        unsafe_allow_html=True)
-            st.markdown(f"<div class='final-card'>{collected['final_response']}</div>",
-                        unsafe_allow_html=True)
+    # Metrics
+    st.markdown(f"""
+    <div class="metric-row">
+        <div class="metric-box"><div class="metric-val">4</div><div class="metric-lbl">Agents Run</div></div>
+        <div class="metric-box"><div class="metric-val">{collected['llm_calls']}</div><div class="metric-lbl">LLM Calls</div></div>
+        <div class="metric-box"><div class="metric-val">✅</div><div class="metric-lbl">Status</div></div>
+    </div>
+    """, unsafe_allow_html=True)
 
-        # Save
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"travel_plan_{timestamp}.md"
-        save_dir = os.path.join(os.path.dirname(__file__), "travel_plans")
-        os.makedirs(save_dir, exist_ok=True)
+    # Final plan card
+    if collected["final_response"]:
+        st.markdown("<div class='sec-head'><span>🧠 Final Travel Plan</span></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='final-card'>{collected['final_response']}</div>", unsafe_allow_html=True)
 
-        file_content = f"""# Travel Plan
-**Query:** {user_query}
+    # Save Markdown file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"travel_plan_{timestamp}.md"
+    save_dir = os.path.join(os.path.dirname(__file__), "travel_plans")
+    os.makedirs(save_dir, exist_ok=True)
+
+    file_content = f"""# Travel Plan
+**Query:** {effective_query}
 **Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 **User ID:** {thread_id}
 
@@ -482,14 +580,17 @@ if generate:
 ---
 *LLM Calls: {collected['llm_calls']}*
 """
-        with open(os.path.join(save_dir, filename), "w", encoding="utf-8") as f:
-            f.write(file_content)
+    with open(os.path.join(save_dir, filename), "w", encoding="utf-8") as f:
+        f.write(file_content)
 
-        dl_col, info_col = st.columns([1, 3])
-        with dl_col:
-            st.download_button("⬇️ Download Plan", data=file_content,
-                               file_name=filename, mime="text/markdown",
-                               use_container_width=True)
-        with info_col:
-            st.markdown(f"<div class='save-bar'>📁 Auto-saved → <code>travel_plans/{filename}</code></div>",
-                        unsafe_allow_html=True)
+    dl_col, info_col = st.columns([1, 3])
+    with dl_col:
+        st.download_button(
+            "⬇️ Download Plan",
+            data=file_content,
+            file_name=filename,
+            mime="text/markdown",
+            use_container_width=True,
+        )
+    with info_col:
+        st.markdown(f"<div class='save-bar'>📁 Auto-saved → <code>travel_plans/{filename}</code></div>", unsafe_allow_html=True)
