@@ -348,7 +348,7 @@ if "user_query" not in st.session_state:
 def apply_quick_prompt(prompt_text: str):
     st.session_state.user_query = prompt_text
 
-thread_id = "user_aarohi"
+thread_id = "user"
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown("""
