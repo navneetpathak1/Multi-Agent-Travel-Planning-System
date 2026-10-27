@@ -1,5 +1,5 @@
 # ✈️ AI Travel Booking System
-LIVE: [Live Project](https://multi-agent-planning-system.streamlit.app/)
+LIVE: [Live Project](https://multi-agent-travel-planning-system-2.onrender.com/)
 An autonomous, multi-agent travel concierge that automates end-to-end trip planning from natural language queries. Built with **LangGraph**, **Groq**, **PostgreSQL**, and **Streamlit**, the system orchestrates real-time flight searches, accommodation discovery, day-by-day itinerary synthesis, and full travel proposal generation.
 
 ---
